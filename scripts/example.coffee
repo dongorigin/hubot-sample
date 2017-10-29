@@ -37,14 +37,8 @@ module.exports = (robot) ->
     if res?
       msg.reply "#{err}\n#{err.stack}"
 
-  # robot.respond /ok/, (res) ->
-  #   text = "hello"
-  #   # attachments = [{
-  #   #   title: "title",
-  #   #   text: "text"
-  #   #   # url: "https://www.bilibili.com/video/av2271112"
-  #   # }]
-  #   res.send text, attachments
+  robot.respond /are you ok/, (res) ->
+    res.send 'https://www.bilibili.com/video/av2271112'
 
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
