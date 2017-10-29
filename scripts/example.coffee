@@ -38,7 +38,7 @@ module.exports = (robot) ->
       else
           message res, 'task failed, ' + result.stderr
     else
-      message res, "task failed, project path #{project_path} not exists"
+      message res, "task failed, project path [#{project_path}] not exists"
 
 
   robot.error (err, res) ->
