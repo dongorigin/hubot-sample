@@ -21,22 +21,18 @@ module.exports = (robot) ->
 
     project_path = shell.env.MAGNET_PROJECT_PATH
     if !project_path
-      "task failed, env.MAGNET_PROJECT_PATH not exists, check environment variable"
+      message res, 'task failed, env.MAGNET_PROJECT_PATH not exists, please check environment variable'
       return
 
     if fs.existsSync project_path
-      result = shell.cd project_path
-      if result.code == 0
-        shell.exec "bundle exec fastlane staging", (code, stdout, stderr) ->
-            console.log('Exit code:', code)
-            console.log('Program output:', stdout)
-            console.log('Program stderr:', stderr)
-            if code == 0
-              message res, 'task successful'
-            else
-              message res, 'task failed:' + stderr
-      else
-          message res, 'task failed, ' + result.stderr
+      shell.exec 'bundle exec fastlane staging', {cwd:project_path}, (code, stdout, stderr) ->
+        console.log('Exit code:', code)
+        console.log('Program output:', stdout)
+        console.log('Program stderr:', stderr)
+        if code == 0
+          message res, 'task successful'
+        else
+          message res, 'task failed:' + stderr
     else
       message res, "task failed, project path [#{project_path}] not exists"
 
