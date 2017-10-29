@@ -9,12 +9,33 @@
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
 
 module.exports = (robot) ->
+  message = (res, text) ->
+    console.log text
+    res.send text
 
-  robot.respond /ok/, (res) ->
-    exec = require('child_process').exec
-    exec('echo hello')
-    res.send 'hello'
+  # 发布 Staging
+  robot.respond /staging/, (res) ->
+    shell = require('shelljs')
+    fs = require('fs');
 
+    message res, 'task start'
+    project_path = shell.env.MAGNET_PROJECT_PATH
+    console.log project_path
+    if fs.existsSync project_path
+      result = shell.cd project_path
+      if result.code == 0
+        shell.exec 'bundle exec fastlane staging', (callback) ->
+          message res, 'task successful'
+      else
+          message res, 'task failed, ' + result.stderr
+    else
+      message res, "task failed, project path #{project_path} not exists, check environment variable"
+
+
+  robot.error (err, res) ->
+    robot.logger.error "#{err}\n#{err.stack}"
+    if res?
+      msg.reply "#{err}\n#{err.stack}"
 
   # robot.respond /ok/, (res) ->
   #   text = "hello"
@@ -97,12 +118,6 @@ module.exports = (robot) ->
   #   robot.messageRoom room, "I have a secret: #{secret}"
   #
   #   res.send 'OK'
-  #
-  # robot.error (err, res) ->
-  #   robot.logger.error "DOES NOT COMPUTE"
-  #
-  #   if res?
-  #     res.reply "DOES NOT COMPUTE"
   #
   # robot.respond /have a soda/i, (res) ->
   #   # Get number of sodas had (coerced to a number).
