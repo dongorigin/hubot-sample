@@ -15,21 +15,30 @@ module.exports = (robot) ->
 
   # 发布 Staging
   robot.respond /staging/, (res) ->
+    message res, 'task start'
     shell = require('shelljs')
     fs = require('fs');
 
-    message res, 'task start'
     project_path = shell.env.MAGNET_PROJECT_PATH
-    console.log project_path
+    if !project_path
+      "task failed, env.MAGNET_PROJECT_PATH not exists, check environment variable"
+      return
+
     if fs.existsSync project_path
       result = shell.cd project_path
       if result.code == 0
-        shell.exec 'bundle exec fastlane staging', (callback) ->
-          message res, 'task successful'
+        shell.exec "bundle exec fastlane staging", (code, stdout, stderr) ->
+            console.log('Exit code:', code)
+            console.log('Program output:', stdout)
+            console.log('Program stderr:', stderr)
+            if code == 0
+              message res, 'task successful'
+            else
+              message res, 'task failed:' + stderr
       else
           message res, 'task failed, ' + result.stderr
     else
-      message res, "task failed, project path #{project_path} not exists, check environment variable"
+      message res, "task failed, project path #{project_path} not exists"
 
 
   robot.error (err, res) ->
