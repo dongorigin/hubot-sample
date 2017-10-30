@@ -9,6 +9,19 @@
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
 
 module.exports = (robot) ->
+
+  # bearychat.attachment
+  robot.respond /attachments/i, (res) ->
+    text = "text, this field accept `markdown`"
+    attachments = [{
+      title: "attachment title",
+      text: "attachment text",
+      color: "#ffa500",
+      images: [{url: "http://img7.doubanio.com/icon/ul15067564-30.jpg"}]
+    }]
+    # res.reply text, attachments
+    res.send text, attachments
+
   message = (res, text) ->
     console.log text
     res.send text
