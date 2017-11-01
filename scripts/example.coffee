@@ -9,6 +9,14 @@
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
 
 module.exports = (robot) ->
+  robot.respond /hello/, (res) ->
+    text = '\n'
+    text += String.raw'    ___              __           _     __' + '\n'
+    text += String.raw'   /   |  ____  ____/ /________  (_)___/ /' + '\n'
+    text += String.raw'  / /| | / __ \/ __  / ___/ __ \/ / __  / ' + '\n'
+    text += String.raw' / ___ |/ / / / /_/ / /  / /_/ / / /_/ /  ' + '\n'
+    text += String.raw'/_/  |_/_/ /_/\__,_/_/   \____/_/\__,_/   ' + '\n'
+    res.send text
 
   # bearychat.attachment
   robot.respond /attachments/i, (res) ->
